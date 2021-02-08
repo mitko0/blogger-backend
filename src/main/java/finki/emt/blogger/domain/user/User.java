@@ -3,6 +3,7 @@ package finki.emt.blogger.domain.user;
 import finki.emt.blogger.domain.base.AbstractEntity;
 import finki.emt.blogger.domain.base.DomainObjectId;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,13 +14,14 @@ import java.util.List;
 @Entity
 public class User extends AbstractEntity<UserId> {
 
-    private String username;
-
     @Embedded
     private Email email;
 
     @Embedded
     private Password password;
+
+    @Embedded
+    private Image profilePicture;
 
     @Enumerated(EnumType.STRING)
     private Subscription subscription = Subscription.silver;
@@ -43,6 +45,14 @@ public class User extends AbstractEntity<UserId> {
         this.subscription = Subscription.silver;
     }
 
+    public User(UserDto userDto) {
+        super(DomainObjectId.generateId(UserId.class));
+
+        this.email = new Email(userDto.getEmail());
+        this.password = new Password(userDto.getPassword());
+        this.subscription = Subscription.silver;
+    }
+
     @Override
     public UserId id() {
         return this.id;
@@ -58,5 +68,11 @@ public class User extends AbstractEntity<UserId> {
         this.subscription = subscription;
 
         return this.subscription;
+    }
+
+    public Image updateProfilePicture(MultipartFile file) {
+        this.profilePicture = new Image(file);
+
+        return this.profilePicture;
     }
 }

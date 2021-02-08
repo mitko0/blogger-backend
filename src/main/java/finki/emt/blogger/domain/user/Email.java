@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 @Embeddable
 public class Email implements ValueObject {
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String value;
 
     protected Email() {

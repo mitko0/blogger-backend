@@ -3,6 +3,7 @@ package finki.emt.blogger.domain.user;
 import finki.emt.blogger.domain.base.ValueObject;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -25,10 +26,10 @@ public class Password implements ValueObject {
     }
 
     private void setPassword(String value) {
-        if (!Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8,20}$", value)) {
+        if (!Pattern.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!.?@#$%^&-+=()]).{8,20}$", value)) {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        this.value = value;
+        this.value = new BCryptPasswordEncoder().encode(value);
     }
 }
