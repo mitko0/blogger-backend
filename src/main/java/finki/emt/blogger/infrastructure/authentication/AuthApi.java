@@ -16,12 +16,12 @@ public class AuthApi {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticate(@RequestBody UserDto user) {
-        return ResponseEntity.ok(authenticationPort.authenticate(user));
+    public ResponseEntity<?> authenticate(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(authenticationPort.authenticate(userDto));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserDto user) {
-        return ResponseEntity.ok(authenticationPort.register(user));
+    public ResponseEntity<?> register(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(authenticationPort.register(userDto));
     }
 }

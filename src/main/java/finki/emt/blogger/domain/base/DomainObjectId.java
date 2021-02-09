@@ -1,12 +1,14 @@
 package finki.emt.blogger.domain.base;
 
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.MappedSuperclass;
 import java.util.Objects;
 import java.util.UUID;
 
+@Getter
 @EqualsAndHashCode
 @MappedSuperclass
 public abstract class DomainObjectId implements ValueObject {

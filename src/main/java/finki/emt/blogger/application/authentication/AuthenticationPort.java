@@ -5,7 +5,7 @@ import finki.emt.blogger.domain.user.UserDto;
 
 public interface AuthenticationPort {
 
-    AuthDto authenticate(UserDto user);
+    AuthDto authenticate(UserDto userDto);
 
-    UserDto register(UserDto user);
+    UserDto register(UserDto userDto);
 }

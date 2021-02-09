@@ -1,15 +1,12 @@
 package finki.emt.blogger.application.authentication;
 
 import finki.emt.blogger.domain.authentication.AuthDto;
+import finki.emt.blogger.domain.authentication.AuthUserDetails;
 import finki.emt.blogger.domain.authentication.JwtUtil;
-import finki.emt.blogger.domain.user.User;
-import finki.emt.blogger.domain.user.UserDto;
-import finki.emt.blogger.domain.user.UserRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
+import finki.emt.blogger.domain.user.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,38 +15,47 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthenticationService implements AuthenticationPort {
 
     private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private final UserDomainService userDomainService;
 
     public AuthenticationService(AuthenticationManager authenticationManager,
                                  JwtUtil jwtUtil,
-                                 @Qualifier("customUserDetailsService") UserDetailsService userDetailsService, UserRepository userRepository) {
+                                 UserRepository userRepository,
+                                 UserDomainService userDomainService) {
 
         this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
+        this.userDomainService = userDomainService;
     }
 
     @Override
-    public AuthDto authenticate(UserDto user) {
+    public AuthDto authenticate(UserDto userDto) {
 
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+                new UsernamePasswordAuthenticationToken(userDto.email, userDto.password)
         );
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+        User user = userRepository.findUserByEmail(new Email(userDto.email))
+                .orElseThrow(() -> new RuntimeException("User not found!"));
 
-        return new AuthDto(jwtUtil.generateToken(userDetails));
+        UserDetails userDetails = new AuthUserDetails(user);
+
+        String jwt = jwtUtil.generateToken(userDetails);
+        userDto = userDomainService.mapUserToDto(user);
+
+        return new AuthDto(jwt, userDto);
     }
 
     @Override
-    public UserDto register(UserDto user) {
+    public UserDto register(UserDto userDto) {
+        Email email = new Email(userDto.email);
+        Password password = new Password(userDto.password);
 
-        User newUser = new User(user);
-        userRepository.saveAndFlush(newUser);
+        User user = new User(email, password);
+        userRepository.saveAndFlush(user);
 
-        return new UserDto(user.getEmail(), newUser.getPassword().getValue());
+        return userDomainService.mapUserToDto(user);
     }
 }

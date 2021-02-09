@@ -45,34 +45,20 @@ public class User extends AbstractEntity<UserId> {
         this.subscription = Subscription.silver;
     }
 
-    public User(UserDto userDto) {
-        super(DomainObjectId.generateId(UserId.class));
-
-        this.email = new Email(userDto.getEmail());
-        this.password = new Password(userDto.getPassword());
-        this.subscription = Subscription.silver;
-    }
-
     @Override
     public UserId id() {
         return this.id;
     }
 
-    public Password changePassword(String newPassword) {
+    public void changePassword(String newPassword) {
         this.password = new Password(newPassword);
-
-        return this.password;
     }
 
-    public Subscription updateSubscription(Subscription subscription) {
+    public void updateSubscription(Subscription subscription) {
         this.subscription = subscription;
-
-        return this.subscription;
     }
 
-    public Image updateProfilePicture(MultipartFile file) {
+    public void updateProfilePicture(MultipartFile file) {
         this.profilePicture = new Image(file);
-
-        return this.profilePicture;
     }
 }
