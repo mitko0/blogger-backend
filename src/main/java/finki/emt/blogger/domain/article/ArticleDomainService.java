@@ -19,7 +19,6 @@ public class ArticleDomainService {
 
         if (user != null) {
             userDto = userDomainService.mapUserToDto(user);
-
         }
 
         SecretArticleDto articleDto = new SecretArticleDto(article.id().getId(), article.getTitle(), article.getCreatedAt(), userDto);
