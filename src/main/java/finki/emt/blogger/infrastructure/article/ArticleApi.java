@@ -29,8 +29,8 @@ public class ArticleApi {
 
     @GetMapping("/current-user")
     public ResponseEntity<?> forUser(@RequestHeader(required = false, defaultValue = "0") int page,
-                                   @RequestHeader(required = false, defaultValue = "10") int size,
-                                   @RequestHeader("Authorization") String authorizationHeader) {
+                                     @RequestHeader(required = false, defaultValue = "10") int size,
+                                     @RequestHeader("Authorization") String authorizationHeader) {
 
         String jwt = authorizationHeader.substring(7);
         return ResponseEntity.ok(articlePort.listArticlesForCurrentUser(jwt, page, size));
@@ -42,12 +42,6 @@ public class ArticleApi {
 
         String jwt = authorizationHeader.substring(7);
         return ResponseEntity.ok(articlePort.storeArticle(articleDto, jwt));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<?> show(@PathVariable String id) {
-
-        return ResponseEntity.ok(articlePort.showArticle(id));
     }
 
     @PatchMapping

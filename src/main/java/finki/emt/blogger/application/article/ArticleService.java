@@ -81,17 +81,6 @@ public class ArticleService implements ArticlePort {
     }
 
     @Override
-    public PublicArticleDto showArticle(String articleId) {
-        Article article = articleRepository.findById(new ArticleId(articleId))
-                .orElseThrow(() -> new RuntimeException("Article not found!"));
-
-        User creator = userRepository.findById(article.getCreatorId())
-                .orElseThrow(() -> new RuntimeException("User not found!"));
-
-        return (PublicArticleDto) articleDomainService.mapArticleToDto(article, creator, PublicArticleDto.class);
-    }
-
-    @Override
     public PublicArticleDto updateArticle(PublicArticleDto articleDto) {
         Article article = articleRepository.findById(new ArticleId(articleDto.id))
                 .orElseThrow(() -> new RuntimeException("Article not found"));

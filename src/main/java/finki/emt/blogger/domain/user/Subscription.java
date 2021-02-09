@@ -5,9 +5,9 @@ public enum Subscription {
     gold(50),
     platinum(Integer.MAX_VALUE);
 
-    public final Integer amount;
+    public final int amount;
 
-    Subscription(Integer amount) {
+    Subscription(int amount) {
         this.amount = amount;
     }
 }

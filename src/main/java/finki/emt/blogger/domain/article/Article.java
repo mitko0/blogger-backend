@@ -2,6 +2,7 @@ package finki.emt.blogger.domain.article;
 
 import finki.emt.blogger.domain.base.AbstractEntity;
 import finki.emt.blogger.domain.base.DomainObjectId;
+import finki.emt.blogger.domain.user.User;
 import finki.emt.blogger.domain.user.UserId;
 import lombok.Getter;
 import org.hibernate.annotations.Where;
@@ -24,6 +25,9 @@ public class Article extends AbstractEntity<ArticleId> {
     private Date createdAt;
 
     private boolean active = true;
+
+    @Column(name = "total_views")
+    private long totalViews = 0;
 
     @Version
     @Temporal(TemporalType.TIMESTAMP)
@@ -51,6 +55,12 @@ public class Article extends AbstractEntity<ArticleId> {
     @Override
     public ArticleId id() {
         return this.id;
+    }
+
+    public void updateViewCount(User viewer) {
+        if (!this.getCreatorId().getId().equals(viewer.id().getId())) {
+            this.totalViews++;
+        }
     }
 
     public void updateTitle(String title) {

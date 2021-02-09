@@ -15,7 +15,7 @@ public class View extends AbstractEntity<ViewId> {
 
     @Column(name = "viewed_at")
     @Temporal(TemporalType.TIMESTAMP)
-    private final Date viewedAt;
+    private Date viewedAt;
 
     @Version
     @Temporal(TemporalType.TIMESTAMP)
@@ -30,7 +30,11 @@ public class View extends AbstractEntity<ViewId> {
     @ManyToOne
     private User viewer;
 
-    protected View(User viewer, ArticleId articleId) {
+    protected View() {
+        super(DomainObjectId.generateId(ViewId.class));
+    }
+
+    public View(User viewer, ArticleId articleId) {
         super(DomainObjectId.generateId(ViewId.class));
 
         this.viewer = viewer;

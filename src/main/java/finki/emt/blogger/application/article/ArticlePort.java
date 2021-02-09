@@ -13,8 +13,6 @@ public interface ArticlePort {
 
     PublicArticleDto storeArticle(PublicArticleDto articleDto, String jtw);
 
-    PublicArticleDto showArticle(String articleId);
-
     PublicArticleDto updateArticle(PublicArticleDto articleDto);
 
     void deleteArticle(String articleId);

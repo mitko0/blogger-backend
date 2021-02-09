@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class User extends AbstractEntity<UserId> {
     private Date version;
 
     @OneToMany(mappedBy = "viewer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<View> views;
+    private List<View> views = new ArrayList<>();
 
     protected User() {
         super(DomainObjectId.generateId(UserId.class));
@@ -48,6 +49,10 @@ public class User extends AbstractEntity<UserId> {
     @Override
     public UserId id() {
         return this.id;
+    }
+
+    public void addView(View view) {
+        this.views.add(view);
     }
 
     public void changePassword(String newPassword) {
